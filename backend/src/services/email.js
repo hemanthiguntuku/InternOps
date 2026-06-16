@@ -37,6 +37,10 @@ class EmailService {
       console.warn('[Email] SMTP not configured – using console fallback');
       return null;
     }
+    console.log("EMAIL HOST:", config.email.host);
+    console.log("EMAIL PORT:", config.email.port);
+    console.log("EMAIL USER:", config.email.user);
+
     this.transporter = nodemailer.createTransport({
       host: config.email.host,
       port: config.email.port,

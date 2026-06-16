@@ -8,7 +8,9 @@ function buildRedisUrl() {
   const host = restUrl.replace('https://', '').replace(/\/$/, '');
   return `rediss://default:${token}@${host}:6379`;
 }
-
+console.log("SMTP_HOST =", process.env.SMTP_HOST);
+console.log("SMTP_USER =", process.env.SMTP_USER);
+console.log("SMTP_PASS =", process.env.SMTP_PASS ? "SET" : "NOT SET");
 module.exports = {
   port: parseInt(process.env.PORT, 10) || 5000,
   host: process.env.HOST || '0.0.0.0',
@@ -49,7 +51,8 @@ module.exports = {
     apiKey: process.env.UPTOSKILLS_API_KEY || '',
   },
   email: {
-    host: process.env.SMTP_HOST,
+    host: process.env.SMTP_HOST ||
+    "NOT_FOUND",
     port: parseInt(process.env.SMTP_PORT, 10) || 587,
     secure: process.env.SMTP_SECURE === 'true',
     user: process.env.SMTP_USER,

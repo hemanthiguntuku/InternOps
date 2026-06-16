@@ -6,9 +6,17 @@ const { createAuditLog, extractRequestInfo } = require('../../utils/audit');
 
 async function forgotPassword(email, requestInfo) {
   const user = await userRepo.findByEmail(email);
-  if (!user) throw new Error('If that email exists, a reset link has been sent.');
+
+  if (!user) {
+    return {
+      message: 'If that email exists, a reset link has been sent.'
+    };
+  }
+
   const token = await repo.createResetToken(user.id);
+
   await emailService.sendPasswordReset(email, token);
+
   await createAuditLog({
     userId: user.id,
     action: 'PASSWORD_RESET_REQUESTED',
@@ -16,8 +24,11 @@ async function forgotPassword(email, requestInfo) {
     resourceId: user.id,
     ...requestInfo,
   });
-}
 
+  return {
+    message: 'If that email exists, a reset link has been sent.'
+  };
+}
 async function resetPassword(token, newPassword, requestInfo) {
   const record = await repo.verifyResetToken(token);
   if (!record) throw new BadRequestError('Invalid or expired reset token');

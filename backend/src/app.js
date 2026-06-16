@@ -18,10 +18,7 @@ const metrics = require("./utils/metrics");
 const { initializeWebSocket } = require("./websocket");
 
 const app = Fastify({
-  logger:
-    config.nodeEnv === "development"
-      ? { transport: { target: "pino-pretty" } }
-      : true,
+  logger: true,
   genReqId: () => uuidv4(),
 });
 // registerPlugins();
@@ -94,9 +91,6 @@ app.register(require("@fastify/swagger-ui"), {
 app.register(require("./modules/auth/routes"), {
   prefix: "/api/auth",
 });
-app.register(require("@fastify/swagger-ui"), { routePrefix: "/docs" });
-// registerRoutes();
-app.register(require("./modules/auth/routes"), { prefix: "/api/auth" });
 app.register(require("./modules/users/routes"), { prefix: "/api/users" });
 app.register(require("./modules/departments/routes"), {
   prefix: "/api/departments",

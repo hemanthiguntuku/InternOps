@@ -147,19 +147,19 @@ describe('Email Service', () => {
   // ---------- Bounce Handling ----------
   describe('bounce handling', () => {
     it('should suppress bounced addresses when bounce check enabled', async () => {
-      const originalConfig = require('../../src/config');
-      originalConfig.email.bounceCheckEnabled = true;
-
-      emailService._trackBounce('bounce@example.com');
-
+      jest.resetModules();
+      const config = require('../../src/config/index');
+      config.email.bounceCheckEnabled = true;
+const freshEmailService = require('../../src/services/email');
+      freshEmailService._trackBounce('bounce@example.com');
       await expect(
-        emailService.send({
+        freshEmailService.send({
           to: 'bounce@example.com',
           subject: 'Retry',
           text: 'fail',
         })
       ).rejects.toThrow('Bounced address suppressed');
-      originalConfig.email.bounceCheckEnabled = false;
+      config.email.bounceCheckEnabled = false;
     });
   });
 

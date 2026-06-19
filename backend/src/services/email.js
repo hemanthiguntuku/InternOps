@@ -1,5 +1,5 @@
 ﻿const nodemailer = require('nodemailer');
-const config = require('../config');
+const config = require('../config/index');
 const path = require('path');
 const fs = require('fs');
 
@@ -65,11 +65,14 @@ class EmailService {
   }
 
   _checkBounce(to) {
-    if (config.email.bounceCheckEnabled && bounceList.has(to)) {
-      throw new Error(`Bounced address suppressed: ${to}`);
-    }
+  process.stdout.write(
+  `DEBUG: enabled=${config.email.bounceCheckEnabled}, exists=${bounceList.has(to)}, email=${to}\n`
+);
+  console.log("CONFIG =", config.email);
+  if (config.email.bounceCheckEnabled && bounceList.has(to)) {
+    throw new Error(`Bounced address suppressed: ${to}`);
   }
-
+}
   _render(templateName, data) {
     const tpl = this.templates[templateName];
     if (!tpl) return { html: null, text: null };

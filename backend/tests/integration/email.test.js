@@ -150,7 +150,7 @@ describe('Email Service', () => {
       jest.resetModules();
       const config = require('../../src/config/index');
       config.email.bounceCheckEnabled = true;
-const freshEmailService = require('../../src/services/email');
+      const freshEmailService = require('../../src/services/email');
       freshEmailService._trackBounce('bounce@example.com');
       await expect(
         freshEmailService.send({

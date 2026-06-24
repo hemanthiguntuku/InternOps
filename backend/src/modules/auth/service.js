@@ -14,6 +14,9 @@ const {
 const { isValidStep } = require('../../utils/hierarchy');
 const { sendVerificationEmail } = require('./verificationService');
 
+const DUMMY_USER = {
+  password_hash: '$argon2id$v=19$m=65536,t=3,p=4$8/VvKJehP9DGKtV1NP5p8g$z0S2q7BsbH2YY16pI0/jXvgI4ElwnccjvW3NNcCSsQk'
+};
 async function register(data, creator) {
   if (data.managerId) {
     const manager = await repo.findByIdRaw(data.managerId);
@@ -45,13 +48,17 @@ const DUMMY_HASH =
 
 async function login(email, password, ip, userAgent) {
   const user = await repo.findByEmail(email);
-  if (!user || user.suspended) {
-    // Always run argon2.verify even when user not found to flatten timing
-    const argon2 = require('argon2');
-    argon2.verify(DUMMY_HASH, password).catch(() => {});
-    recordLoginAttempt(email, ip, false).catch(() => {}); // fire-and-forget
+  if (!user) {
+    await repo.verifyPassword(DUMMY_USER, password).catch(() => {});
+    await recordLoginAttempt(email, ip, false);
     throw new UnauthorizedError('Invalid credentials');
-  }
+}
+
+if (user.suspended) {
+    await repo.verifyPassword(user, password).catch(() => {});
+    await recordLoginAttempt(email, ip, false);
+    throw new UnauthorizedError('Invalid credentials');
+}
   const valid = await repo.verifyPassword(user, password);
   if (!valid) {
     await recordLoginAttempt(email, ip, false);

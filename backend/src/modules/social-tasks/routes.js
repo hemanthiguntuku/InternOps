@@ -102,18 +102,6 @@ module.exports = async function socialTasksRoutes(fastify) {
       return { success: true };
     }
   );
-
-  // List social tasks (any authenticated user). Optional ?deadlineBefore=ISO date.
-  fastify.get(
-    '/',
-    {
-      schema: { tags: ['Tasks'], description: 'List social tasks' },
-      preHandler: [auth],
-    },
-    async (req) => {
-      return repo.getTasks(req.query || {});
-    }
-  );
   // // Update a social task
   fastify.put(
     '/:id',

@@ -27,7 +27,7 @@ import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import api from '../lib/axios';
 import { UserAvatar, ConfirmationModal } from '../components/ui';
 import useAuthStore from '../store/auth';
-import { ROLE_LABEL } from "../constants/roles";
+import { ROLE_LABEL } from '../constants/roles';
 
 const nav = [
   { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },

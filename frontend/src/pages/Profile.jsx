@@ -52,6 +52,7 @@ export default function Profile() {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [nameError, setNameError] = useState('');
+<<<<<<< HEAD
   const {
     data: profile,
     isLoading,
@@ -59,6 +60,9 @@ export default function Profile() {
     error: profileError,
     refetch,
   } = useQuery({
+=======
+  const { data: profile, isLoading } = useQuery({
+>>>>>>> ed55774 (Add client-side validation for profile name)
     queryKey: ['myProfile'],
     queryFn: () => api.get('/users/me').then((res) => res.data),
   });
@@ -76,6 +80,7 @@ export default function Profile() {
     const name = fullName.trim();
 
     if (name.length < 3) {
+<<<<<<< HEAD
       setNameError('Name must be at least 3 characters.');
       return false;
     }
@@ -88,6 +93,20 @@ export default function Profile() {
     setNameError('');
     return true;
   };
+=======
+        setNameError("Name must be at least 3 characters.");
+        return false;
+    }
+
+    if (name.length > 50) {
+        setNameError("Name must not exceed 50 characters.");
+        return false;
+    }
+
+    setNameError("");
+    return true;
+};
+>>>>>>> ed55774 (Add client-side validation for profile name)
   const updateProfileMut = useMutation({
     mutationFn: (data) => api.patch('/users/me', data),
     onSuccess: (_res, vars) => {
@@ -364,18 +383,34 @@ export default function Profile() {
                 placeholder="Enter your full name"
               />
               {nameError && (
+<<<<<<< HEAD
                 <p className="text-sm text-red-500 mt-1">{nameError}</p>
               )}
+=======
+                 <p className="text-sm text-red-500 mt-1">
+                     {nameError}
+                 </p>
+                )}
+>>>>>>> ed55774 (Add client-side validation for profile name)
             </div>
 
             <Btn
               onClick={() => {
+<<<<<<< HEAD
                 if (!validateProfile()) return;
 
                 updateProfileMut.mutate({
                   full_name: fullName.trim(),
                 });
               }}
+=======
+    if (!validateProfile()) return;
+
+    updateProfileMut.mutate({
+        full_name: fullName.trim(),
+    });
+}}
+>>>>>>> ed55774 (Add client-side validation for profile name)
               disabled={
                 updateProfileMut.isPending || fullName === profile?.full_name
               }

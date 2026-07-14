@@ -41,7 +41,6 @@ function initials(name, email) {
   );
 }
 
-
 export default function Profile() {
   const queryClient = useQueryClient();
   const user = useAuthStore((s) => s.user);

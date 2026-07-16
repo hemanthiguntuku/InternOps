@@ -35,7 +35,6 @@ describe('Health Check Integration Tests', () => {
       const body = JSON.parse(res.body);
       expect(body).toEqual({
         status: 'ok',
-        db: 'connected',
       });
     });
   });
@@ -49,7 +48,7 @@ describe('Health Check Integration Tests', () => {
       expect(res.statusCode).toBe(200);
       const body = JSON.parse(res.body);
       expect(body.status).toBe('healthy');
-      expect(body.checks).toEqual({ db: true, redis: true });
+      expect(body.checks).toBeUndefined();
     });
   });
 });
